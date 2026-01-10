@@ -1,34 +1,41 @@
-package com.example.news
+package com.example.news.ui.newslist
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.news.adapter.NewsAdapter
 import com.example.news.api.NewsApiService
-import com.example.news.databinding.ActivityMainBinding
-import com.example.news.model.NewsResponse
+import com.example.news.ui.newslist.adapter.NewsAdapter
+import com.example.news.databinding.NewsListFragmentBinding
+import com.example.news.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+@AndroidEntryPoint
+class NewsListFragment : Fragment(R.layout.news_list_fragment) {
+    private lateinit var _binding: NewsListFragmentBinding
+    private val binding get() = _binding
+
+    // Hilt will inject this automatically
+    @Inject
+    lateinit var newsApiService: NewsApiService
     private val newsAdapter = NewsAdapter()
-    private lateinit var newsApiService: NewsApiService
 
     companion object {
         private const val BASE_URL = "https://newsapi.org/"
-        private const val API_KEY = "595beb4f3cf340c4a6ad62b639f3896b" // Replace with your actual API key
+        private const val API_KEY = "2df34f56b1d74800ab06d57295dbedc2" // API key
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = NewsListFragmentBinding.bind(view)
 
         setupRecyclerView()
         setupSwipeRefresh()
@@ -38,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         binding.newsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(context)
             adapter = newsAdapter
         }
     }
@@ -55,8 +62,8 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(NewsApiService::class.java)
-    }
 
+    }
     private fun fetchNews() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -68,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
-                        this@MainActivity,
+                        context,
                         "Error fetching news: ${e.message}",
                         Toast.LENGTH_LONG
                     ).show()
