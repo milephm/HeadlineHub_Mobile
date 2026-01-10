@@ -6,13 +6,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.news.api.NewsApiService
 import com.example.news.ui.newslist.adapter.NewsAdapter
 import com.example.news.ui.viewmodel.NewsViewModel
 import com.example.news.databinding.NewsListFragmentBinding
 import com.example.news.R
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class NewsListFragment : Fragment(R.layout.news_list_fragment) {
@@ -20,8 +18,8 @@ class NewsListFragment : Fragment(R.layout.news_list_fragment) {
     private val binding get() = _binding
 
     // Hilt will inject this automatically
-    @Inject
-    lateinit var newsApiService: NewsApiService
+//    @Inject
+//    lateinit var newsApiService: NewsApiService
     private val newsAdapter = NewsAdapter()
     private val viewModel: NewsViewModel by viewModels()
 
@@ -32,6 +30,21 @@ class NewsListFragment : Fragment(R.layout.news_list_fragment) {
         setupRecyclerView()
         setupObservers()
         setupSwipeRefresh()
+
+        newsAdapter.setOnSaveClickListener { article ->
+            if (article.isSaved) {
+                viewModel.saveArticle(article)
+                Toast.makeText(requireContext(), "Article Saved", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.deleteArticle(article)
+                Toast.makeText(requireContext(), "Article Removed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshState()
     }
 
     private fun setupRecyclerView() {
