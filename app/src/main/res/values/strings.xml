@@ -5,4 +5,6 @@
     <string name="save_article">Save for Later</string>
     <string name="no_saved_warning">No saved articles yet!</string>
     <string name="saved">Saved</string>
+    <string name="saved_screen_titled">Saved</string>
+    <string name="news_screen_titled">News</string>
 </resources>

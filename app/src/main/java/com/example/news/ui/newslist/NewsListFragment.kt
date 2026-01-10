@@ -4,18 +4,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.news.api.NewsApiService
 import com.example.news.ui.newslist.adapter.NewsAdapter
+import com.example.news.ui.viewmodel.NewsViewModel
 import com.example.news.databinding.NewsListFragmentBinding
 import com.example.news.R
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,20 +23,15 @@ class NewsListFragment : Fragment(R.layout.news_list_fragment) {
     @Inject
     lateinit var newsApiService: NewsApiService
     private val newsAdapter = NewsAdapter()
-
-    companion object {
-        private const val BASE_URL = "https://newsapi.org/"
-        private const val API_KEY = "2df34f56b1d74800ab06d57295dbedc2" // API key
-    }
+    private val viewModel: NewsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = NewsListFragmentBinding.bind(view)
 
         setupRecyclerView()
+        setupObservers()
         setupSwipeRefresh()
-        setupNewsApi()
-        fetchNews()
     }
 
     private fun setupRecyclerView() {
@@ -50,38 +41,28 @@ class NewsListFragment : Fragment(R.layout.news_list_fragment) {
         }
     }
 
-    private fun setupSwipeRefresh() {
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            fetchNews()
+    private fun setupObservers() {
+        // 1. Observe the news list
+        viewModel.articles.observe(viewLifecycleOwner) { articles ->
+            newsAdapter.updateArticles(articles)
+        }
+
+        // 2. Observe loading state (for the spinner)
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.swipeRefreshLayout.isRefreshing = isLoading
+        }
+
+        // 3. Observe errors
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage != null) {
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+            }
         }
     }
 
-    private fun setupNewsApi() {
-        newsApiService = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(NewsApiService::class.java)
-
-    }
-    private fun fetchNews() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = newsApiService.getTopHeadlines(apiKey = API_KEY)
-                withContext(Dispatchers.Main) {
-                    newsAdapter.updateArticles(response.articles)
-                    binding.swipeRefreshLayout.isRefreshing = false
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        context,
-                        "Error fetching news: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    binding.swipeRefreshLayout.isRefreshing = false
-                }
-            }
+    private fun setupSwipeRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.fetchNews()
         }
     }
 }

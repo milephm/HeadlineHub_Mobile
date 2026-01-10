@@ -13,8 +13,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    // You should replace this with your actual API base URL
-    private const val BASE_URL = "https://api.yournewsapi.com/" // TODO: Replace with your actual base URL
+    private const val BASE_URL = "https://newsapi.org/"
 
     @Provides
     @Singleton
