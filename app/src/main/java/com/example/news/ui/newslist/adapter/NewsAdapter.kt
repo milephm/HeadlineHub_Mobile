@@ -14,7 +14,6 @@ import androidx.core.net.toUri
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     private var articles = listOf<Article>()
-    // Create a variable to hold the function
     private var onSaveClickListener: ((Article) -> Unit)? = null
 
     fun updateArticles(newArticles: List<Article>) {
@@ -22,7 +21,6 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         notifyDataSetChanged()
     }
 
-    // Helper function to set the listener from the Fragment
     fun setOnSaveClickListener(listener: (Article) -> Unit) {
         onSaveClickListener = listener
     }
@@ -62,8 +60,6 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
                     error(MaterialR.drawable.ic_mtrl_chip_close_circle)
                 }
             }
-
-            // --- SAVE / HEART LOGIC (New) ---
 
             // 1. Set the initial icon based on whether it's already saved
             val initialIcon = if (article.isSaved) R.drawable.ic_favorite_filled_24 else R.drawable.ic_favorite_border_24

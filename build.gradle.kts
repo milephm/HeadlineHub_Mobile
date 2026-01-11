@@ -4,6 +4,6 @@ plugins {
     alias(libs.plugins.kotlinAndroid) apply false
     alias(libs.plugins.navigation.safeargs) apply false
     alias(libs.plugins.hilt.android) apply false
-//    alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.room) apply false
 }

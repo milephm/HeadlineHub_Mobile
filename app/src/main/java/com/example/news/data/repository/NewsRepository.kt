@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class NewsRepository @Inject constructor(
     private val newsApiService: NewsApiService,
-    private val db: ArticleDatabase // Hilt injects the database we just built
+    private val db: ArticleDatabase
 ) {
 
     // 1. Network Call
@@ -25,6 +25,5 @@ class NewsRepository @Inject constructor(
         return db.getArticleDao().getAllSavedUrls()
     }
 
-    // Note: This returns LiveData, so it's not a suspend function
     fun getSavedNews() = db.getArticleDao().getAllArticles()
 }

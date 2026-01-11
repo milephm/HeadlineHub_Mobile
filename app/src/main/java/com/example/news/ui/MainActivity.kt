@@ -3,6 +3,7 @@ package com.example.news.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,6 +14,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         // Set the activity content view
@@ -25,19 +28,11 @@ class MainActivity : AppCompatActivity() {
 
         // Bottom navigation bar
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.splashScreenFragment) {
-                // Hide the navigation bar on the splash screen
-                bottomNav.visibility = View.GONE
-            } else {
-                // Show it on all other screens (NewsList, SavedNews)
-                bottomNav.visibility = View.VISIBLE
-            }
-        }
+        bottomNav.visibility = View.VISIBLE
         bottomNav.setupWithNavController(navController)
 
         // Navigate to the NewsListFragment
-        navController.navigate(R.id.splashScreenFragment)
+        navController.navigate(R.id.newsListFragment)
 
         // Hide the ActionBar
         supportActionBar?.hide()

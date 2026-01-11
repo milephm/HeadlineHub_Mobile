@@ -3,18 +3,18 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.navigation.safeargs)
     alias(libs.plugins.hilt.android)
-//    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
     namespace = "com.example.news"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.news"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -45,7 +45,17 @@ android {
     }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
+
+    // Javax
+    implementation(libs.javax.inject)
+
     // Hilt
     // Change from KAPT to KSP
     implementation(libs.hilt.android)
@@ -56,7 +66,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-
 
     // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -70,14 +79,17 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     
     // Retrofit for networking
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     
     // Coil for image loading
-    implementation("io.coil-kt:coil:2.5.0")
-    
+    implementation(libs.coil)
+
+    // Layout
+    implementation(libs.androidx.recyclerview)
+
     // SwipeRefreshLayout
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation(libs.androidx.swiperefreshlayout)
     
     // Testing
     testImplementation(libs.junit)

@@ -22,8 +22,4 @@ interface ArticleDao {
 
     @Query("SELECT url FROM articles")
     suspend fun getAllSavedUrls(): List<String>
-
-    // Check if an article exists (useful for toggling the heart icon)
-    @Query("SELECT EXISTS(SELECT * FROM articles WHERE url = :url)")
-    suspend fun isArticleSaved(url: String): Boolean
 }

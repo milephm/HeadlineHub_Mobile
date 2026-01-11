@@ -1,4 +1,12 @@
+<!--suppress ALL -->
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.News.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/purple</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/news_avd_v02</item>
+        <item name="android:windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.News</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="Base.Theme.News" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
