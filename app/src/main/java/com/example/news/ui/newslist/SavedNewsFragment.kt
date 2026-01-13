@@ -10,6 +10,7 @@ import com.example.news.R
 import com.example.news.ui.newslist.adapter.NewsAdapter
 import com.example.news.databinding.SavedListFragmentBinding
 import com.example.news.ui.viewmodel.NewsViewModel
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,6 +21,15 @@ class SavedNewsFragment : Fragment(R.layout.saved_list_fragment) {
 
     private val viewModel: NewsViewModel by viewModels()
     private val newsAdapter = NewsAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // forward = true  -> Slide in from the right (Opening the screen)
+        // forward = false -> Slide out to the right (Closing the screen)
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

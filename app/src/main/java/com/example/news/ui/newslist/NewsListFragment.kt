@@ -10,6 +10,7 @@ import com.example.news.ui.newslist.adapter.NewsAdapter
 import com.example.news.ui.viewmodel.NewsViewModel
 import com.example.news.databinding.NewsListFragmentBinding
 import com.example.news.R
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,6 +23,15 @@ class NewsListFragment : Fragment(R.layout.news_list_fragment) {
 //    lateinit var newsApiService: NewsApiService
     private val newsAdapter = NewsAdapter()
     private val viewModel: NewsViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // When leaving to go to Saved News: Slide out to the LEFT
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+
+        // When returning from Saved News: Slide back in from the LEFT
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

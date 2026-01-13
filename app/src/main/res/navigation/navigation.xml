@@ -13,13 +13,29 @@
         android:id="@+id/newsListFragment"
         android:name="com.example.news.ui.newslist.NewsListFragment"
         android:label="NewsListFragment"
-        tools:layout="@layout/news_list_fragment"/>
+        tools:layout="@layout/news_list_fragment">
+        <action
+            android:id="@+id/action_newsListFragment_to_savedNewsFragment"
+            app:destination="@id/savedNewsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/savedNewsFragment"
         android:name="com.example.news.ui.newslist.SavedNewsFragment"
         android:label="SavedListFragment"
-        tools:layout="@layout/saved_list_fragment" />
+        tools:layout="@layout/saved_list_fragment" >
+        <action
+            android:id="@+id/action_savedNewsFragment_to_newsListFragment"
+            app:destination="@id/newsListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
 <!--    <fragment-->
 <!--        android:id="@+id/splashScreenFragment"-->

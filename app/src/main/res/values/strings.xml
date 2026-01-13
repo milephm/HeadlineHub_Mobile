@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">News</string>
-    <string name="logo">News</string>
+<!--    <string name="logo">News</string>-->
     <string name="open_in_browser">Open In Browser</string>
     <string name="save_article">Save for Later</string>
     <string name="no_saved_warning">No saved articles yet!</string>
